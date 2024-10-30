@@ -10,7 +10,7 @@ import useApi from "../hook/useApi";
 import { useAuth } from "../hook/useAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTodos, updateTodos } from "../redux/slices/TodoSlice";
-export const Screen_02 = ({ route, navigation }) => {
+export const Screen_02_Toolkit = ({ route, navigation }) => {
     const [search, setSearch] = useState("");
 
     const todos = useSelector((state) => state.todos.value);;
