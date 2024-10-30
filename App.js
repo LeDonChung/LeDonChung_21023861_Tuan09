@@ -3,6 +3,7 @@ import {AppNavigation} from './src/navigations/AppNavigation';
 import { AuthProvider } from './src/hook/useAuth';
 import { Provider } from 'react-redux';
 import Store from './src/redux/saga/store-redux-saga';
+import { RecoilRoot } from 'recoil';
 // import store from './src/redux/store'; 
 export default function App() {
   return (
