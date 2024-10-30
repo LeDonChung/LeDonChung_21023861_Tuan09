@@ -8,16 +8,20 @@ import { ItemTodo } from "../components/TodoItem";
 import { useAuth } from "../hook/useAuth";
 import { useRecoilState } from "recoil";
 import { todosState } from '../state/todoAtoms';
-import { fetchTodosApi } from "../state/todoAPI";
+import { fetchTodosApi, updateData } from "../state/todoAPI";
 
 export const Screen_02 = ({ route, navigation }) => {
     const [search, setSearch] = useState("");
 
-    const [todos, setTodos] = useRecoilState(todosState);    
+    const [todos, setTodos] = useRecoilState(todosState);
     const fetchTodos = async () => {
         const data = await fetchTodosApi();
         setTodos(data);
-      };
+    };
+
+    const updateTodos = async (id, body) => {
+        const data = await updateData(id, body);
+    }
     // const {data, updateData, fetchData, setData} = useApi("https://6457b5721a4c152cf98861de.mockapi.io/api/ck/todos");
     /**
      * Khi search thay đổi thì filter ra những item có title chứa search
@@ -33,10 +37,10 @@ export const Screen_02 = ({ route, navigation }) => {
             todosSearch = todos.filter((item) => {
                 return item.title.includes(search)
             })
-            
+
         }
     }, [search])
- 
+
     /**
      * Lấy dữ liệu từ API
      */
@@ -44,19 +48,19 @@ export const Screen_02 = ({ route, navigation }) => {
         fetchTodos()
     }, [route.params?.action])
 
-    useEffect(() => {}, [])
+    useEffect(() => { }, [])
     /**
      * Hàm cập nhật trạng thái của item
      * @param {*} id 
      */
-    const onUpdateCompleted = (id) => {
+    const onUpdateCompleted = async (id) => {
         const item = todos.find((item) => item.id === id)
         let body = {
             title: item.title,
             completed: true
         }
-        // dispatch(updateTodos({id: id, body: body}));
-        fetchTodos() 
+        await updateTodos(id, body);
+        fetchTodos()
 
     }
     useEffect(() => {
@@ -104,8 +108,8 @@ export const Screen_02 = ({ route, navigation }) => {
                         <View style={{ flex: 1, alignItems: 'center', paddingVertical: 30 }}>
                             <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'flex-start', borderWidth: 1, borderColor: '#9095A0', borderRadius: 10 }}>
                                 <Image
-                                    source={require("./../../assets/icon-search.png")} resizeMode="contain"/>
-                                <TextInput  
+                                    source={require("./../../assets/icon-search.png")} resizeMode="contain" />
+                                <TextInput
                                     value={search}
                                     placeholder="Search"
                                     onChangeText={(text) => { setSearch(text) }}
@@ -123,7 +127,7 @@ export const Screen_02 = ({ route, navigation }) => {
                         </View>
 
                     </View>
-                )} 
+                )}
                 ListFooterComponent={(
                     <View style={{ flex: 0.5, marginVertical: 20 }}>
                         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => { navigation.navigate("screen3", { action: 'add' }) }}>
