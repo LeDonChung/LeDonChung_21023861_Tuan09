@@ -1,7 +1,7 @@
 
-# Tuần 06
+# Tuần 09
 
-Thiết kế giao diện react native dùng axios gọi API
+Build redux-toolkit, redux-saga, recoil
 
 
 ## Installation
@@ -9,8 +9,7 @@ Thiết kế giao diện react native dùng axios gọi API
 Clone project
 
 ```bash
-  git clone https://github.com/LeDonChung/ReactNative.git
-  cd Tuan06
+  git clone https://github.com/LeDonChung/LeDonChung_21023861_Tuan09
 ```
 
 Start project with npm
