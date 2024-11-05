@@ -4,13 +4,12 @@ import { TouchableOpacity } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import IconA from 'react-native-vector-icons/AntDesign';
-import { ItemTodo } from "../components/TodoItem";
-import { useAuth } from "../hook/useAuth";
+import {useAuth} from "../../hook/useAuth";
+import { ItemTodo } from "../../components/TodoItem";
+import { fetchTodosApi, updateData } from "../../recoil/todoAPI";
 import { useRecoilState } from "recoil";
-import { todosState } from '../recoil/todoAtoms';
-import { fetchTodosApi, updateData } from "../recoil/todoAPI";
-
-export const Screen_02 = ({ route, navigation }) => {
+import { todosState } from "../../recoil/todoAtoms";
+export const Screen_02_Recoil = ({ route, navigation }) => {
     const [search, setSearch] = useState("");
 
     const [todos, setTodos] = useRecoilState(todosState);
@@ -20,9 +19,12 @@ export const Screen_02 = ({ route, navigation }) => {
     };
 
     const updateTodos = async (id, body) => {
+        console.log("id", id)
+        console.log("body", body)
         const data = await updateData(id, body);
-    }
-    // const {data, updateData, fetchData, setData} = useApi("https://6457b5721a4c152cf98861de.mockapi.io/api/ck/todos");
+        fetchTodos(); 
+    } 
+
     /**
      * Khi search thay đổi thì filter ra những item có title chứa search
      */
@@ -36,11 +38,11 @@ export const Screen_02 = ({ route, navigation }) => {
         } else {
             todosSearch = todos.filter((item) => {
                 return item.title.includes(search)
-            })
-
+            })  
+            setTodos(todosSearch)
         }
     }, [search])
-
+ 
     /**
      * Lấy dữ liệu từ API
      */
@@ -48,7 +50,7 @@ export const Screen_02 = ({ route, navigation }) => {
         fetchTodos()
     }, [route.params?.action])
 
-    useEffect(() => { }, [])
+    useEffect(() => {}, [])
     /**
      * Hàm cập nhật trạng thái của item
      * @param {*} id 
@@ -60,8 +62,6 @@ export const Screen_02 = ({ route, navigation }) => {
             completed: true
         }
         await updateTodos(id, body);
-        fetchTodos()
-
     }
     useEffect(() => {
         fetchTodos()
@@ -75,7 +75,7 @@ export const Screen_02 = ({ route, navigation }) => {
                 data={todos}
                 renderItem={({ item }) =>
                     <ItemTodo
-                        onCompleted={onUpdateCompleted}
+                        onCompleted={() => {onUpdateCompleted(item.id)}}
                         props={item}
                         onUpdate={() => navigation.navigate("screen3", { action: 'update', itemUpdate: item })} />
                 }
@@ -87,7 +87,7 @@ export const Screen_02 = ({ route, navigation }) => {
                                 <IconA name="arrowleft" size={24} color='#000' />
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Image source={require('./../../assets/Avatar 31.png')} />
+                                <Image source={require('./../../../assets/Avatar 31.png')} />
                                 <View style={{ paddingStart: 20 }}>
                                     <Text style={{
                                         fontSize: 20,
@@ -108,8 +108,8 @@ export const Screen_02 = ({ route, navigation }) => {
                         <View style={{ flex: 1, alignItems: 'center', paddingVertical: 30 }}>
                             <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'flex-start', borderWidth: 1, borderColor: '#9095A0', borderRadius: 10 }}>
                                 <Image
-                                    source={require("./../../assets/icon-search.png")} resizeMode="contain" />
-                                <TextInput
+                                    source={require("./../../../assets/icon-search.png")} resizeMode="contain"/>
+                                <TextInput  
                                     value={search}
                                     placeholder="Search"
                                     onChangeText={(text) => { setSearch(text) }}
@@ -127,11 +127,11 @@ export const Screen_02 = ({ route, navigation }) => {
                         </View>
 
                     </View>
-                )}
+                )} 
                 ListFooterComponent={(
                     <View style={{ flex: 0.5, marginVertical: 20 }}>
                         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => { navigation.navigate("screen3", { action: 'add' }) }}>
-                            <Image source={require('./../../assets/icon-add.png')} />
+                            <Image source={require('./../../../assets/icon-add.png')} />
                         </TouchableOpacity>
                     </View>
                 )}

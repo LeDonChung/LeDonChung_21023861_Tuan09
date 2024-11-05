@@ -4,16 +4,18 @@ import { TouchableOpacity } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native" 
 import { SafeAreaView } from "react-native-safe-area-context"
 import IconA from 'react-native-vector-icons/AntDesign';
-import useApi from "../hook/useApi";
-import { useAuth } from "../hook/useAuth";
-export const Screen_03 = ({ navigation, route }) => {
+import { useAuth } from "../../hook/useAuth";
+import { useRecoilState } from "recoil";
+import { todosState } from "../../recoil/todoAtoms";
+import { addData, updateData } from "../../recoil/todoAPI";
+export const Screen_03_Recoil = ({ navigation, route }) => {
     const { action, itemUpdate } = route.params;
     const [job, setJob] = useState(itemUpdate?.title || '');
-    const { updateData, addData } = useApi("https://6457b5721a4c152cf98861de.mockapi.io/api/ck/todos");
-    const { user } = useAuth();
+    const { user } = useAuth(); 
+
+    
     const finish = async () => {
         if (job === '') {
-            Alert.alert('Error', 'Please input your job')
             return;
         }
 
@@ -24,24 +26,28 @@ export const Screen_03 = ({ navigation, route }) => {
         }
 
         if (action === 'add') {
-            console.log(body)
-            response = await addData(body).then((res) => {
-                ToastAndroid.show("Add job success", ToastAndroid.SHORT);
-                navigation.navigate({
+            const res = await addData(body);
+            console.log(res)
+            if (res) { 
+                navigation.navigate({ 
                     name: 'screen2',
                     params: { action: `Add job ${job} success` },
                     merge: true,
                 });
-            })
+            }
         } else {
-            console.log(body)
-            response = await updateData(itemUpdate?.id, body).then((res) => {
+            console.log("itemUpdate.id", itemUpdate.id)
+
+            console.log("body", body)
+            const res = await updateData(itemUpdate.id, body );
+            if (res) {
                 navigation.navigate({
                     name: 'screen2',
                     params: { action: `Update job ${job} with id ${itemUpdate.id}` },
                     merge: true,
                 });
-            })
+            }
+
         }
 
 
@@ -69,7 +75,7 @@ export const Screen_03 = ({ navigation, route }) => {
                         </Text>
                         <View style={{ flexDirection: 'row', paddingHorizontal: 10, marginVertical: 30, alignItems: 'center', justifyContent: 'flex-start', borderWidth: 1, borderColor: '#9095A0', borderRadius: 10 }}>
                             <Image
-                                source={require("./../../assets/fxemoji_note.png")} resizeMode="contain" />
+                                source={require("./../../../assets/fxemoji_note.png")} resizeMode="contain" />
                             <TextInput
                                 value={job}
                                 placeholder="Input your job"
@@ -91,7 +97,7 @@ export const Screen_03 = ({ navigation, route }) => {
                         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
 
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Image source={require('./../../assets/Avatar 31.png')} />
+                                <Image source={require('./../../../assets/Avatar 31.png')} />
                                 <View style={{ paddingStart: 20 }}>
                                     <Text style={{
                                         fontSize: 20,
@@ -132,7 +138,7 @@ export const Screen_03 = ({ navigation, route }) => {
                             </Text>
                             <IconA name="arrowright" size={24} color='#fff' />
                         </TouchableOpacity>
-                        <Image style={{ marginTop: 60 }} resizeMode="contain" source={require('./../../assets/Image 95.png')} />
+                        <Image style={{ marginTop: 60 }} resizeMode="contain" source={require('./../../../assets/Image 95.png')} />
 
                     </View>
                 )}
