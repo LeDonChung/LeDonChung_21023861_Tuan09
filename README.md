@@ -1,7 +1,7 @@
 
 # Tuần 09
 
-Build redux-toolkit, redux-saga, recoil
+Implemention Todo App with redux-toolkit, redux-saga, recoil
 
 
 ## Installation
