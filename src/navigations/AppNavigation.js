@@ -5,6 +5,8 @@ import { Screen_02 } from "../pages/Screen_02";
 import { Screen_03 } from "../pages/Screen_03";
 import { Screen_02_Toolkit } from "../pages/redux-toolkit/Screen_02_Toolkit";
 import { Screen_03_Toolkit } from "../pages/redux-toolkit/Screen_03_Toolkit";
+import { Screen_02_Saga } from "../pages/redux-saga/Screen_02_Saga";
+import { Screen_03_Saga } from "../pages/redux-saga/Screen_03_Saga";
 
 const Stack = createStackNavigator();
 
@@ -15,8 +17,14 @@ export const AppNavigation = () => {
                 <Stack.Navigator screenOptions={{headerShown: false}}>
                     <Stack.Screen name="screen1" component={Screen_01} />
                     {/* Screen for Redux Toolkit */}
-                    <Stack.Screen name="screen2" component={Screen_02_Toolkit} />
-                    <Stack.Screen name="screen3" component={Screen_03_Toolkit} />
+                    {/* <Stack.Screen name="screen2" component={Screen_02_Toolkit} />
+                    <Stack.Screen name="screen3" component={Screen_03_Toolkit} /> */}
+
+                    {/* Screen for Redux Saga */}
+                    <Stack.Screen name="screen2" component={Screen_02_Saga} />
+                    <Stack.Screen name="screen3" component={Screen_03_Saga} />
+
+                    
                 </Stack.Navigator>
             </NavigationContainer>
         </>
