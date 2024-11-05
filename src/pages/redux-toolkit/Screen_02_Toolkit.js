@@ -4,19 +4,16 @@ import { TouchableOpacity } from "react-native";
 import { FlatList, StyleSheet, Text, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import IconA from 'react-native-vector-icons/AntDesign';
-import { ItemTodo } from "../components/TodoItem";
-import axios from "axios";
-import useApi from "../hook/useApi";
-import { useAuth } from "../hook/useAuth";
+import { ItemTodo } from "../../components/TodoItem";
+import { useAuth } from "../../hook/useAuth";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTodos, updateTodos } from "../redux/slices/TodoSlice";
+import { fetchTodos, setTodos, updateTodos } from "../../redux-tool-kit/slices/TodoSlice";
 export const Screen_02_Toolkit = ({ route, navigation }) => {
     const [search, setSearch] = useState("");
 
     const todos = useSelector((state) => state.todos.value);;
     const dispatch = useDispatch();
 
-    // const {data, updateData, fetchData, setData} = useApi("https://6457b5721a4c152cf98861de.mockapi.io/api/ck/todos");
     /**
      * Khi search thay đổi thì filter ra những item có title chứa search
      */
@@ -31,7 +28,7 @@ export const Screen_02_Toolkit = ({ route, navigation }) => {
             todosSearch = todos.filter((item) => {
                 return item.title.includes(search)
             })
-            
+            dispatch(setTodos(todosSearch))
         }
     }, [search])
  
@@ -40,20 +37,20 @@ export const Screen_02_Toolkit = ({ route, navigation }) => {
      */
     useEffect(() => {
         dispatch(fetchTodos())
-    }, [route.params?.action])
-
+    }, [route.params?.action]) 
+  
     useEffect(() => {}, [])
     /**
      * Hàm cập nhật trạng thái của item
      * @param {*} id 
      */
-    const onUpdateCompleted = (id) => {
+    const onUpdateCompleted = async (id) => {
         const item = todos.find((item) => item.id === id)
         let body = {
             title: item.title,
             completed: true
         }
-        dispatch(updateTodos({id: id, body: body}));
+        await dispatch(updateTodos({id: id, body: body}));
         dispatch(fetchTodos())
 
     }
@@ -81,7 +78,7 @@ export const Screen_02_Toolkit = ({ route, navigation }) => {
                                 <IconA name="arrowleft" size={24} color='#000' />
                             </TouchableOpacity>
                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                <Image source={require('./../../assets/Avatar 31.png')} />
+                                <Image source={require('./../../../assets/Avatar 31.png')} />
                                 <View style={{ paddingStart: 20 }}>
                                     <Text style={{
                                         fontSize: 20,
@@ -102,7 +99,7 @@ export const Screen_02_Toolkit = ({ route, navigation }) => {
                         <View style={{ flex: 1, alignItems: 'center', paddingVertical: 30 }}>
                             <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'flex-start', borderWidth: 1, borderColor: '#9095A0', borderRadius: 10 }}>
                                 <Image
-                                    source={require("./../../assets/icon-search.png")} resizeMode="contain"/>
+                                    source={require("./../../../assets/icon-search.png")} resizeMode="contain"/>
                                 <TextInput  
                                     value={search}
                                     placeholder="Search"
@@ -125,7 +122,7 @@ export const Screen_02_Toolkit = ({ route, navigation }) => {
                 ListFooterComponent={(
                     <View style={{ flex: 0.5, marginVertical: 20 }}>
                         <TouchableOpacity style={{ alignItems: 'center' }} onPress={() => { navigation.navigate("screen3", { action: 'add' }) }}>
-                            <Image source={require('./../../assets/icon-add.png')} />
+                            <Image source={require('./../../../assets/icon-add.png')} />
                         </TouchableOpacity>
                     </View>
                 )}

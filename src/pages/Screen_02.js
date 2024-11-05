@@ -7,8 +7,8 @@ import IconA from 'react-native-vector-icons/AntDesign';
 import { ItemTodo } from "../components/TodoItem";
 import { useAuth } from "../hook/useAuth";
 import { useRecoilState } from "recoil";
-import { todosState } from '../state/todoAtoms';
-import { fetchTodosApi, updateData } from "../state/todoAPI";
+import { todosState } from '../recoil/todoAtoms';
+import { fetchTodosApi, updateData } from "../recoil/todoAPI";
 
 export const Screen_02 = ({ route, navigation }) => {
     const [search, setSearch] = useState("");
